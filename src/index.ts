@@ -1,24 +1,10 @@
 import axios from 'axios';
-import { Price } from './types/Price';
-import { Payload } from './types/Payload';
-import { Ticker } from './types/Ticker';
+import { Price } from './types/price';
+import { Ticker } from './types/ticker';
+import { Payload } from './types/payload';
+import { API_BINANCE_C2C, API_BUENBIT_TICKERS, API_BINANCE_CEC_PAYLOAD } from './types/constants';
 
-const API_BUENBIT_TICKERS = "https://be.buenbit.com/api/market/tickers";
-const API_BINANCE_C2C = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search";
-const API_BINANCE_CEC_PAYLOAD: Payload = {
-  proMerchantAds:false,
-  page:1,
-  rows:10,
-  payTypes:[],
-  countries:[],
-  publisherType:null,
-  tradeType:"SELL",
-  asset:"USDT",
-  fiat:"PEN"
-};
-
-
-const getTickerPriceByCurrency = async (apiUrl: string, bidCurrency: string, askCurrency: string): Promise<Price | undefined | null> => {
+export const getTickerPriceByCurrency = async (apiUrl: string, bidCurrency: string, askCurrency: string): Promise<Price | undefined | null> => {
   try {
     const apiResponse = await axios.get(apiUrl);
     const tickers =await apiResponse.data;
@@ -33,7 +19,7 @@ const getTickerPriceByCurrency = async (apiUrl: string, bidCurrency: string, ask
   }
 }
 
-const getP2PPricesByPayload = async (apiUrl: string, payload: Payload): Promise<Ticker[] | undefined> => {
+export const getP2PPricesByPayload = async (apiUrl: string, payload: Payload): Promise<Ticker[] | undefined> => {
   const prices: Ticker[] = [];
   try {
     const apiResponse = await axios.post(apiUrl, payload);

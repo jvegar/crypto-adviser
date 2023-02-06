@@ -1,0 +1,38 @@
+version: '3.5'
+
+services:
+  db:
+    container_name: crypto_adviser_db
+    image: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-crypto_adviser_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  flyway:
+    container_name: flyway_adviser_db
+    image: flyway/flyway
+    command: -configFiles=/flyway/conf/flyway.conf -locations=filesystem:/flyway/sql -connectRetries=60 migrate
+    volumes:
+      - ${PWD}/flyway/sql:/flyway/sql
+      - ${PWD}/flyway/conf/flyway.conf:/flyway/conf/flyway.conf
+    depends_on:
+      - db
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:
