@@ -27,7 +27,10 @@ export const getP2PPricesByPayload = async (apiUrl: string, payload: Payload): P
     for(const p2p of dataObject.data){
       prices.push({
         nickName: p2p.advertiser.nickName, 
-        price: p2p.adv.price
+        price: p2p.adv.price,
+        surplusAmount: p2p.adv.surplusAmount,
+        maxSingleTransAmount: p2p.adv.maxSingleTransAmount,
+        minSingleTransAmount: p2p.adv.minSingleTransAmount
       });
     }
     return prices;
